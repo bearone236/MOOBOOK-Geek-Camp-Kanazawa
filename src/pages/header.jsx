@@ -1,7 +1,15 @@
 import React from "react";
+import Camera_test2 from "./camera_test2";
 
-const header = () => {
-  return <div></div>;
+const Header = () => {
+  return (
+    <div>
+      <header>
+        <h1>GESTURE BOOK</h1>
+        <Camera_test2 />
+      </header>
+    </div>
+  );
 };
 
-export default header;
+export default Header;
