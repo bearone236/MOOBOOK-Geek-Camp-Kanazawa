@@ -1,6 +1,7 @@
 import React from "react";
 
 const Home = () => {
+
   return (
     <div className="home">
       <div className="homeMenu" id="operation_button">
