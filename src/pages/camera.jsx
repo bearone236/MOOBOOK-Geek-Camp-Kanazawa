@@ -32,6 +32,7 @@ const CameraComponent = () => {
         socket.emit('videoData', new Uint8Array(evt.target.result));
       };
       reader.readAsArrayBuffer(data);
+      console.log(data);
     }
   }, []);
 
