@@ -30,12 +30,17 @@ const Book = () => {
   return (
     <div>
       {book && (
-        <>
-          <h2>{book.title}</h2>
-          <img src={`${process.env.PUBLIC_URL}/images/${book.bookId}.png`} alt={book.title} />
-          <p>{book.description}</p>
+        <div>
           <button onClick={handleBackClick}>Go Back</button>
-        </>
+          <h2>{book.title}</h2>
+          <iframe
+            title="Book PDF"
+            src={`${process.env.PUBLIC_URL}/pdfs/${book.bookId}.pdf`}
+            width="100%"
+            height="100%"
+            style={{ position: 'absolute', width: '100%', height: '100vh', border: 'none' }}
+          />
+        </div>
       )}
     </div>
   );
