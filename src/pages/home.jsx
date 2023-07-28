@@ -5,7 +5,7 @@ import { usePose } from './posecontext';
 
 const Home = () => {
   const { pose } = usePose();
-  const linkRef = useRef(null); // Link要素への参照を作成します
+  const linkRef = useRef(null);
 
   useEffect(() => {
     if (pose === 'enter') {
