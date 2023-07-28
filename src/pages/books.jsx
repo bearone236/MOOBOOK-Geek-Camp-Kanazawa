@@ -73,7 +73,7 @@ const Books = () => {
       setBooks(data_result);
     });
   }, []);
-  console.log(books);
+  // console.log(books);
 
   const settings = {
     dots: false,
@@ -101,7 +101,7 @@ const Books = () => {
                   state: { book: book }, // 全ての書籍データを渡します
                 }}
               >
-                <img src={`${process.env.PUBLIC_URL}/images/${book.bookId}.png`} alt={book.title} width="35%" />
+                <img src={`${process.env.PUBLIC_URL}/images/${book.bookId}.png`} alt={book.title} width="33.5%" />
               </Link>
             </div>
           );

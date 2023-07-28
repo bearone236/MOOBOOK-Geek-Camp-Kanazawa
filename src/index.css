@@ -58,12 +58,8 @@ header {
   background-color: lightcoral;
 }
 
-/* camera */
-
-/* .camera_start {
-  font-size: 16px;
+.pdf-images {
+  text-align: center;
+  margin: 0 auto;
+  text-align: -webkit-center;
 }
-
-.camera_close {
-  font-size: 16px;
-} */

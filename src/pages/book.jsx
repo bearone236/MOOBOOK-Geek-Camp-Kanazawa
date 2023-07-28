@@ -1,40 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import '../index.css';
+
+const SampleNextArrow = (props) => {
+  const { className, style, onClick } = props;
+  return <div className={className} style={{ ...style, background: 'black', right: '0px' }} onClick={onClick} />;
+};
+
+const SamplePrevArrow = (props) => {
+  const { className, style, onClick } = props;
+  return <div className={className} style={{ ...style, background: 'black', left: '0px' }} onClick={onClick} />;
+};
 
 const Book = () => {
-  const [book, setBook] = useState();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const state = location.state;
-
-  useEffect(() => {
-    if (state && state.book) {
-      setBook(state.book);
-      console.log('Received book data: ', state.book);
-    } else {
-      console.log('No book data received.');
-    }
-  }, [state]);
-
-  const handleBackClick = () => {
-    navigate(-1);
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    centerMode: true,
+    centerPadding: '100px',
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
   };
 
+  const items = [
+    { title: 'book1', img: `${process.env.PUBLIC_URL}/pdfImages/1001-1.png` },
+    { title: 'book2', img: `${process.env.PUBLIC_URL}/pdfImages/1001-6.png` },
+    { title: 'book3', img: `${process.env.PUBLIC_URL}/pdfImages/1001-5.png` },
+    { title: 'book4', img: `${process.env.PUBLIC_URL}/pdfImages/1001-4.png` },
+    { title: 'book5', img: `${process.env.PUBLIC_URL}/pdfImages/1001-3.png` },
+    { title: 'book6', img: `${process.env.PUBLIC_URL}/pdfImages/1001-2.png` },
+  ];
+
   return (
-    <div>
-      {book && (
-        <div>
-          <button onClick={handleBackClick}>Go Back</button>
-          <h2>{book.title}</h2>
-          <iframe
-            title="Book PDF"
-            src={`${process.env.PUBLIC_URL}/pdfs/${book.id}.pdf`}
-            width="100%"
-            height="100%"
-            style={{ position: 'absolute', width: '100%', height: '100vh', border: 'none' }}
-          />
-        </div>
-      )}
+    <div className="Book">
+      <div>
+        <Slider {...settings}>
+          {items &&
+            items.map((item) => {
+              return (
+                <div className="pdf-images">
+                  <img src={item.img} width="75%" className="pdf-image" alt="items-images" />
+                </div>
+              );
+            })}
+        </Slider>
+      </div>
     </div>
   );
 };
