@@ -1,12 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 import io from 'socket.io-client';
+import '../App.css';
 
 const socket = io('http://localhost:3000');
 
 const videoConstraints = {
-  width: 1280,
-  height: 720,
+  width: 150,
+  height: 100,
   facingMode: 'user',
 };
 
@@ -32,7 +33,6 @@ const CameraComponent = () => {
         socket.emit('videoData', new Uint8Array(evt.target.result));
       };
       reader.readAsArrayBuffer(data);
-      console.log(data);
     }
   }, []);
 
@@ -43,7 +43,9 @@ const CameraComponent = () => {
 
   return (
     <div>
-      <Webcam audio={false} ref={webcamRef} videoConstraints={videoConstraints} />
+      <div className="videocontainer">
+        <Webcam audio={false} ref={webcamRef} videoConstraints={videoConstraints} />
+      </div>
       {capturing ? <button onClick={handleStopCaptureClick}>Stop Capture</button> : <button onClick={handleStartCaptureClick}>Start Capture</button>}
     </div>
   );

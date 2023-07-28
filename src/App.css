@@ -27,13 +27,31 @@
   margin: 0 auto;
 }
 
+.header {
+  padding-left: 380px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header h1 {
+  margin: auto auto;
+}
+
+.camera {
+  padding-left: 200px;
+}
+
 /* Add these styles */
 .slick-next {
-  right: 25px;
+  right: 0;
   z-index: 1;
 }
 
 .slick-prev {
   left: 25px;
   z-index: 1;
+}
+
+.videocontainer {
+  transform: scaleX(-1);
 }

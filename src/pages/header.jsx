@@ -1,12 +1,15 @@
-import React from "react";
-import Camera_test2 from "./camera_test2";
+import React from 'react';
+import CameraComponent from './camera';
+import '../App.css';
 
 const Header = () => {
   return (
     <div>
-      <header>
+      <header className="header">
         <h1>GESTURE BOOK</h1>
-        <Camera_test2 />
+        <div className="camera">
+          <CameraComponent />
+        </div>
       </header>
     </div>
   );
