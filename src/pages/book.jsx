@@ -23,6 +23,7 @@ const Book = () => {
     if (pose === 'toright') {
       if (sliderRef.current) {
         sliderRef.current.slickNext();
+        console.log(pose);
         // resetPose();
       }
     } else if (pose === 'toleft') {

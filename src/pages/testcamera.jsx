@@ -14,7 +14,7 @@ const Testcamera = () => {
     let prevX = null;
     let prevY = null;
     const threshold = 100;
-    // const distThreshold = 5;
+    const distThreshold = 5;
 
     async function setupCamera() {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
@@ -37,71 +37,67 @@ const Testcamera = () => {
       setInterval(async () => {
         const predictions = await model.estimateHands(video, true);
 
-        if (predictions.length === 0) {
-          console.log('手が画面にありません');
-          // ここで何か他の処理を追加
-        }
-        // 各予測結果を描画
-        else
-          predictions.forEach((prediction) => {
-            const landmarks = prediction.landmarks;
-            const tip0 = landmarks[5];
-            const tip1 = landmarks[6];
-            const tip2 = landmarks[7];
-            // console.log(landmarks[0][2]);
+        predictions.forEach((prediction) => {
+          const landmarks = prediction.landmarks;
+          const tip0 = landmarks[5];
+          const tip1 = landmarks[6];
+          const tip2 = landmarks[7];
+          // console.log(landmarks[0][2]);
 
-            //   const dist = Math.hypot(tip0[0] - tip1[0], tip0[1] - tip1[1]);
-            //   debug.textContent = `dist: ${dist}`;
-            const angle =
-              (((tip0[0] - tip1[0]) * (tip2[0] - tip1[0]) + (tip0[1] - tip1[1]) * (tip2[1] - tip1[1]) + (tip0[2] - tip1[2]) * (tip2[2] - tip1[2])) /
-                (Math.sqrt((tip0[0] - tip1[0]) ** 2 + (tip0[1] - tip1[1]) ** 2 + (tip0[2] - tip1[2]) ** 2) *
-                  Math.sqrt((tip2[0] - tip1[0]) ** 2 + (tip2[1] - tip1[1]) ** 2 + (tip2[2] - tip1[2]) ** 2))) *
-              -1;
-            // debugRef.current.textContent = `angle: ${angle}`;
-            if (angle < 0) {
-              // outputRef.current.textContent = '手が閉じています';
-              console.log('手が閉じています');
-              setPose('enter');
-              setGesture(true);
+          //   const dist = Math.hypot(tip0[0] - tip1[0], tip0[1] - tip1[1]);
+          //   debug.textContent = `dist: ${dist}`;
+          const angle =
+            (((tip0[0] - tip1[0]) * (tip2[0] - tip1[0]) + (tip0[1] - tip1[1]) * (tip2[1] - tip1[1]) + (tip0[2] - tip1[2]) * (tip2[2] - tip1[2])) /
+              (Math.sqrt((tip0[0] - tip1[0]) ** 2 + (tip0[1] - tip1[1]) ** 2 + (tip0[2] - tip1[2]) ** 2) *
+                Math.sqrt((tip2[0] - tip1[0]) ** 2 + (tip2[1] - tip1[1]) ** 2 + (tip2[2] - tip1[2]) ** 2))) *
+            -1;
+          // debugRef.current.textContent = `angle: ${angle}`;
+          if (angle < 0) {
+            // outputRef.current.textContent = '手が閉じています';
+            console.log('手が閉じています');
+            // setPose('enter');
+            // setGesture(true);
+          } else {
+            // outputRef.current.textContent = '手が開いています';
+            console.log('手が空いています');
+            // setGesture(false);
+          }
+          console.log(gesture);
+
+          if (prevX && prevY && gesture === true) {
+            const x_dist = landmarks[0][0] - prevX;
+            const y_dist = landmarks[0][1] - prevY;
+            if (x_dist < -1 * threshold) {
+              // Flip x-axis detection
+              // outputRef.current.textContent += `, 手が左に移動しました`;
+              // console.log('手が左に移動しました');
+              setPose('toright');
+            } else if (x_dist > threshold) {
+              // Flip}< prevX) { // Flip x-axis detection
+              // outputRef.current.textContent += `, 手が右に移動しました`;
+              // console.log('手が右に移動しました');
+              setPose('toleft');
             } else {
-              // outputRef.current.textContent = '手が開いています';
-              console.log('手が空いています');
-              setGesture(false);
+              // outputRef.current.textContent += ', 手は左右には動いていません';
+              // console.log('手は左右には動いていません');
             }
-            console.log(gesture);
 
-            if (prevX && prevY && gesture === true) {
-              const x_dist = landmarks[0][0] - prevX;
-              const y_dist = landmarks[0][1] - prevY;
-              if (x_dist < -1 * threshold) {
-                // Flip x-axis detection
-                // outputRef.current.textContent += `, 手が左に移動しました`;
-                console.log('手が左に移動しました');
-                setPose('toright');
-              } else if (x_dist > threshold) {
-                // Flip}< prevX) { // Flip x-axis detection
-                // outputRef.current.textContent += `, 手が右に移動しました`;
-                console.log('手が右に移動しました');
-                setPose('toleft');
-              } else {
-                // outputRef.current.textContent += ', 手は左右には動いていません';
-                // console.log('手は左右には動いていません');
-              }
-
-              if (y_dist < -1 * threshold) {
-                // outputRef.current.textContent += ', 手が上に移動しました';
-                // console.log('手が上に移動しました');
-              } else if (y_dist > threshold) {
-                // outputRef.current.textContent += ', 手が下に移動しました';
-                // console.log('手が下に移動しました');
-              } else {
-                // outputRef.current.textContent += ', 手は上下には動いていません';
-                // console.log('手は上下に動いていません');
-              }
+            if (y_dist < -1 * distThreshold) {
+              // outputRef.current.textContent += ', 手が上に移動しました';
+              console.log('手が上に移動しました');
+              setPose('enter');
+              // setGesture(true);
+            } else if (y_dist > distThreshold) {
+              // outputRef.current.textContent += ', 手が下に移動しました';
+              console.log('手が下に移動しました');
+            } else {
+              // outputRef.current.textContent += ', 手は上下には動いていません';
+              // console.log('手は上下に動いていません');
             }
-            prevX = landmarks[0][0];
-            prevY = landmarks[0][1];
-          });
+          }
+          prevX = landmarks[0][0];
+          prevY = landmarks[0][1];
+        });
       }, 1000);
     }
 
