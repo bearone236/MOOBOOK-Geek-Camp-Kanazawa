@@ -4,7 +4,7 @@ import '../index.css';
 import { usePose } from './posecontext';
 
 const Home = () => {
-  const { pose } = usePose();
+  const { pose, resetPose } = usePose();
   const linkRef = useRef(null);
 
   useEffect(() => {
@@ -12,6 +12,7 @@ const Home = () => {
       console.log('Go');
       if (linkRef.current) {
         linkRef.current.click();
+        resetPose();
       }
     }
   }, [pose]);
@@ -22,7 +23,7 @@ const Home = () => {
         <p>操作説明</p>
       </div> */}
       <div className="homeMenu" id="start_button">
-        <Link to={{ pathname: '/books' }} style={{ textDecoration: 'none' }} ref={linkRef}>
+        <Link to={{ pathname: '/book' }} style={{ textDecoration: 'none' }} ref={linkRef}>
           <p>START</p>
         </Link>
       </div>

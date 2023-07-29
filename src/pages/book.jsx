@@ -1,20 +1,38 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '../index.css';
+import { usePose } from './posecontext';
 
 const SampleNextArrow = (props) => {
   const { className, style, onClick } = props;
-  return <div className={className} style={{ ...style, background: 'black', right: '0px' }} onClick={onClick} />;
+  return <div className={className} style={{ ...style, display: 'block', background: 'black', right: '0px' }} onClick={onClick} />;
 };
 
 const SamplePrevArrow = (props) => {
   const { className, style, onClick } = props;
-  return <div className={className} style={{ ...style, background: 'black', left: '0px' }} onClick={onClick} />;
+  return <div className={className} style={{ ...style, display: 'block', background: 'black', left: '0px' }} onClick={onClick} />;
 };
 
 const Book = () => {
+  const sliderRef = useRef(null);
+  const { pose } = usePose();
+
+  useEffect(() => {
+    if (pose === 'toright') {
+      if (sliderRef.current) {
+        sliderRef.current.slickNext();
+        // resetPose();
+      }
+    } else if (pose === 'toleft') {
+      if (sliderRef.current) {
+        sliderRef.current.slickPrev();
+        // resetPose();
+      }
+    }
+  }, [pose]);
+
   const settings = {
     dots: false,
     infinite: true,
@@ -28,23 +46,21 @@ const Book = () => {
   };
 
   const items = [
-    { title: 'book1', img: `${process.env.PUBLIC_URL}/pdfImages/1001-1.png` },
-    { title: 'book2', img: `${process.env.PUBLIC_URL}/pdfImages/1001-6.png` },
-    { title: 'book3', img: `${process.env.PUBLIC_URL}/pdfImages/1001-5.png` },
-    { title: 'book4', img: `${process.env.PUBLIC_URL}/pdfImages/1001-4.png` },
-    { title: 'book5', img: `${process.env.PUBLIC_URL}/pdfImages/1001-3.png` },
-    { title: 'book6', img: `${process.env.PUBLIC_URL}/pdfImages/1001-2.png` },
+    { id: '1', title: 'book1', img: `${process.env.PUBLIC_URL}/pdfImages/1001-1.png` },
+    { id: '2', title: 'book4', img: `${process.env.PUBLIC_URL}/pdfImages/1001-4.png` },
+    { id: '3', title: 'book5', img: `${process.env.PUBLIC_URL}/pdfImages/1001-3.png` },
+    { id: '4', title: 'book6', img: `${process.env.PUBLIC_URL}/pdfImages/1001-2.png` },
   ];
 
   return (
     <div className="Book">
       <div>
-        <Slider {...settings}>
+        <Slider {...settings} ref={sliderRef}>
           {items &&
             items.map((item) => {
               return (
-                <div className="pdf-images">
-                  <img src={item.img} width="75%" className="pdf-image" alt="items-images" />
+                <div key={item.id} className="pdf-images">
+                  <img src={item.img} width="70%" className="pdf-image" alt="items-images" />
                 </div>
               );
             })}

@@ -55,3 +55,10 @@
 .videocontainer {
   transform: scaleX(-1);
 }
+
+/* -------------
+testcamera.jsx
+---------------*/
+.hidden {
+  display: hidden;
+}

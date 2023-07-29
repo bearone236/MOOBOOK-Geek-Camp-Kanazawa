@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '../App.css';
 import { Link } from 'react-router-dom';
+import { usePose } from './posecontext';
 
-// const baseURL = 'https://sheetdb.io/api/v1/ug4cixwkfzp9t';
 const baseURL = 'https://sheets.googleapis.com/v4/spreadsheets/1Bcc9S-zQJeEirqOIvml2C3AMziyVFGvf4sMtVa3Ch6s/values/haka?key=AIzaSyA4PLe6OiOkD82M-dB9gyVaV3myLE0CBkg';
 const data_number = 5;
 
@@ -22,6 +22,29 @@ const SamplePrevArrow = (props) => {
 
 const Books = () => {
   const [books, setBooks] = useState([]);
+  const { pose, resetPose } = usePose();
+  const linkRef = useRef(null);
+  const sliderRef = useRef(null);
+
+  useEffect(() => {
+    if (pose === 'enter') {
+      console.log('Go');
+      if (linkRef.current) {
+        linkRef.current.click();
+        resetPose();
+      }
+    } else if (pose === 'toright') {
+      if (sliderRef.current) {
+        sliderRef.current.slickNext();
+        // resetPose();
+      }
+    } else if (pose === 'toleft') {
+      if (sliderRef.current) {
+        sliderRef.current.slickPrev();
+        // resetPose();
+      }
+    }
+  }, [pose]);
 
   useEffect(() => {
     axios.get(baseURL).then((response) => {
@@ -89,7 +112,7 @@ const Books = () => {
 
   return (
     <div className="books">
-      <Slider {...settings}>
+      <Slider {...settings} ref={sliderRef}>
         {books.map((book) => {
           // console.log(book.bookId);
           return (
@@ -100,6 +123,7 @@ const Books = () => {
                   pathname: `/book/${book.bookId}`,
                   state: { book: book }, // 全ての書籍データを渡します
                 }}
+                ref={linkRef}
               >
                 <img src={`${process.env.PUBLIC_URL}/images/${book.bookId}.png`} alt={book.title} width="33.5%" />
               </Link>
